@@ -18,35 +18,49 @@
     </section>
 
     <div v-if="state === 'playing'" class="game-play">
-      <!-- Input component will go here in Exercice 4 -->
+      <CodeField 
+        :length="4" 
+        v-model="currentGuess" 
+        @validate="handleValidation" 
+      />
       <p class="info">Tentatives : {{ attempts.length }} / 10</p>
     </div>
 
     <section class="history" v-if="attempts.length > 0">
       <h3>Historique des tentatives</h3>
-      <div v-for="(attempt, index) in reversedAttempts" :key="attempts.length - index" class="attempt-card">
-          <div class="attempt-code">
-            <span v-for="d in attempt.guess" class="digit">{{ d }}</span>
-          </div>
-          <div class="attempt-feedback">
-            <span class="well-placed">✅ {{ attempt.wellPlaced }}</span>
-            <span class="misplaced">⚠️ {{ attempt.misplaced }}</span>
-          </div>
-      </div>
+      <TransitionGroup name="list" tag="div" class="attempts-list">
+        <div v-for="(attempt, index) in reversedAttempts" :key="attempts.length - index" class="attempt-card">
+            <div class="attempt-code">
+              <span v-for="d in attempt.guess" class="digit">{{ d }}</span>
+            </div>
+            <div class="attempt-feedback">
+              <span class="well-placed">✅ {{ attempt.wellPlaced }}</span>
+              <span class="misplaced">⚠️ {{ attempt.misplaced }}</span>
+            </div>
+        </div>
+      </TransitionGroup>
     </section>
   </div>
 </template>
 
 <script setup>
-import { inject, onMounted, computed } from 'vue'
+import { inject, onMounted, computed, ref } from 'vue'
 import { useGame } from '../services/game'
+import CodeField from '../components/CodeField.vue'
 
 const pseudo = inject('pseudo')
 const { code, attempts, state, generateCode, validateAttempt } = useGame()
 
+const currentGuess = ref(['', '', '', ''])
+
 const reversedAttempts = computed(() => [...attempts.value].reverse())
 
+const handleValidation = () => {
+  validateAttempt(currentGuess.value)
+}
+
 const resetGame = () => {
+  currentGuess.value = ['', '', '', '']
   generateCode()
 }
 
@@ -117,5 +131,15 @@ onMounted(() => {
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>

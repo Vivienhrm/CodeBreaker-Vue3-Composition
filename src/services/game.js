@@ -25,9 +25,9 @@ export function useGame() {
         let wellPlaced = 0
         let misplaced = 0
 
-        // Clone for comparison
+        // Parse inputs as numbers to ensure comparison works (even if strings are passed)
+        const guess = userAttempt.map(d => parseInt(d, 10))
         const target = [...code.value]
-        const guess = [...userAttempt]
 
         for (let i = 0; i < target.length; i++) {
             if (guess[i] === target[i]) {
