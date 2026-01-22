@@ -1,4 +1,6 @@
 <script setup>
+import { inject } from 'vue'
+const pseudo = inject('pseudo')
 </script>
 
 <template>
@@ -6,6 +8,7 @@
     <router-link to="/home">Accueil</router-link>
     <router-link to="/game">Jeu</router-link>
     <router-link to="/stats">Stats</router-link>
+    <span v-if="pseudo" class="user-pseudo">👤 {{ pseudo }}</span>
   </nav>
   <main>
     <router-view></router-view>
@@ -51,6 +54,13 @@ nav a {
 nav a.router-link-active {
   color: #42b883;
   border-bottom: 2px solid #42b883;
+}
+
+.user-pseudo {
+  margin-left: auto;
+  font-weight: bold;
+  color: #42b883;
+  padding: 0 15px;
 }
 
 button {

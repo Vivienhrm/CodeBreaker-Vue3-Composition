@@ -2,6 +2,9 @@ import { ref } from 'vue'
 
 export function useGame() {
     const code = ref([])
+    const attempts = ref([])
+    const state = ref('playing') // 'playing', 'won', 'lost'
+    const maxAttempts = 10
 
     const generateCode = () => {
         const digits = []
@@ -12,10 +15,50 @@ export function useGame() {
             }
         }
         code.value = digits
+        attempts.value = []
+        state.value = 'playing'
+    }
+
+    const validateAttempt = (userAttempt) => {
+        if (state.value !== 'playing') return
+
+        let wellPlaced = 0
+        let misplaced = 0
+
+        // Clone for comparison
+        const target = [...code.value]
+        const guess = [...userAttempt]
+
+        for (let i = 0; i < target.length; i++) {
+            if (guess[i] === target[i]) {
+                wellPlaced++
+            } else if (target.includes(guess[i])) {
+                misplaced++
+            }
+        }
+
+        const result = {
+            guess: [...userAttempt],
+            wellPlaced,
+            misplaced
+        }
+
+        attempts.value.push(result)
+
+        if (wellPlaced === target.length) {
+            state.value = 'won'
+        } else if (attempts.value.length >= maxAttempts) {
+            state.value = 'lost'
+        }
+
+        return result
     }
 
     return {
         code,
-        generateCode
+        attempts,
+        state,
+        generateCode,
+        validateAttempt
     }
 }
