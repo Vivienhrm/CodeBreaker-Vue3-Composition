@@ -13,45 +13,67 @@
 </template>
 
 <style>
-  :root {
-  font-family: Inter, system-ui, Arial, sans-serif;
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light dark;
   background-color: #242424;
-  color: #fff;
+  color: #ffffff;
 }
 
 body {
   margin: 0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 #app {
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
+nav {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-bottom: 1px solid #444;
+}
+
+nav a {
+  margin: 0 15px;
+  color: #888;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a.router-link-active {
+  color: #42b883;
+  border-bottom: 2px solid #42b883;
+}
+
 button {
+  background-color: #42b883;
+  color: white;
+  border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #3aa876;
 }
 
 input {
   padding: 10px;
   border-radius: 4px;
-}
-
-nav a + a {
-  margin-left: 1rem;
-  position: relative;
-  padding-left: 1rem;
-}
-
-nav a + a::before {
-  content: "|";
-  position: absolute;
-  left: 0;
-  color: #888;
+  border: 1px solid #444;
+  background: #333;
+  color: white;
+  margin: 10px 0;
 }
 
 </style>
